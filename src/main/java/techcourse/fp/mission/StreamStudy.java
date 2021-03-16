@@ -1,14 +1,14 @@
 package techcourse.fp.mission;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import static java.util.Comparator.*;
 
 public class StreamStudy {
     public static long countWords() throws IOException {
@@ -44,9 +44,12 @@ public class StreamStudy {
         String contents = new String(Files.readAllBytes(Paths
             .get("src/main/resources/fp/war-and-peace.txt")), StandardCharsets.UTF_8);
         List<String> words = Arrays.asList(contents.split("[\\P{L}]+"));
-
-        System.out.println(words);
-        System.out.println(words.size());
-        // TODO 이 부분에 구현한다.
+        words.stream()
+                .filter(word -> word.length() > 12)
+                .sorted(comparingInt(String::length).reversed())
+                .distinct()
+                .limit(100)
+                .map(String::toLowerCase)
+                .forEach(System.out::println);
     }
 }
